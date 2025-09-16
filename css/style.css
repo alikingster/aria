@@ -12,6 +12,10 @@
     --card-bg: rgba(255, 255, 255, 0.85);
     --subtle-text: #777;
     --link-color: #77aaff;
+    --button-bg: #333;
+    --button-text: #fff;
+    --form-bg: rgba(255, 255, 255, 0.5);
+    --footer-bg: #333;
 }
 
 body[data-theme="dark"] {
@@ -23,9 +27,14 @@ body[data-theme="dark"] {
     --card-bg: rgba(40, 40, 40, 0.85);
     --subtle-text: #aaa;
     --link-color: #5d9ee0;
+    --button-bg: #5d9ee0;
+    --button-text: #111;
+    --form-bg: rgba(50, 50, 50, 0.5);
+    --footer-bg: #111;
 }
 
-/* * ======================================================================================
+/*
+ * ======================================================================================
  * General Body & Global Styles
  * ======================================================================================
  */
@@ -54,6 +63,9 @@ body {
     color: var(--header-text);
     padding: 1em 0;
     border-bottom: var(--border-color) 3px solid;
+    position: sticky; /* Make header sticky */
+    top: 0;
+    z-index: 1000;
 }
 
 .main-header .container {
@@ -116,7 +128,7 @@ main.container {
     border-radius: 8px;
 }
 
-.blog-posts, .about-me {
+.blog-posts, .about-me, .comments-section {
     padding: 20px;
     margin-bottom: 20px;
 }
@@ -158,6 +170,71 @@ body[data-theme="dark"] .post {
     text-decoration: underline;
 }
 
+/* Social Share Buttons */
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.social-share a {
+    color: var(--text-color);
+    font-size: 1.2em;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+}
+
+.social-share a:hover {
+    color: var(--link-color);
+}
+
+/* Comments Section */
+.comments-section h2 {
+    border-bottom: 2px solid var(--text-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.comment {
+    border-left: 3px solid var(--link-color);
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
+.comment-author {
+    font-size: 0.9em;
+    color: var(--subtle-text);
+}
+
+.comment-form input,
+.comment-form textarea {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--form-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s;
+    box-sizing: border-box;
+}
+
+.comment-form button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.comment-form button:hover {
+    opacity: 0.8;
+}
+
 /* About Me Section */
 .profile-pic {
     width: 120px;
@@ -177,11 +254,11 @@ body[data-theme="dark"] .post {
 
 /*
  * ======================================================================================
- * Footer Styles
+ * Footer, Newsletter, and Back-to-Top
  * ======================================================================================
  */
 .main-footer {
-    background: var(--header-bg);
+    background: var(--footer-bg);
     color: var(--header-text);
     text-align: center;
     padding: 20px 0;
@@ -191,6 +268,40 @@ body[data-theme="dark"] .post {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.newsletter-signup {
+    flex-basis: 100%;
+    margin-bottom: 20px;
+}
+
+.newsletter-signup h3 {
+    margin-top: 0;
+}
+
+.newsletter-signup form {
+    display: flex;
+    justify-content: center;
+}
+
+.newsletter-signup input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.newsletter-signup button {
+    padding: 10px;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    background-color: var(--link-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: opacity 0.3s;
 }
 
 .social-icons a {
@@ -202,6 +313,29 @@ body[data-theme="dark"] .post {
 
 .social-icons a:hover {
     color: var(--link-color);
+}
+
+/* Back-to-Top Button */
+#back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--link-color);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 999;
+}
+
+#back-to-top:hover {
+    transform: scale(1.1);
 }
 
 /*
