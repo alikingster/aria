@@ -9,10 +9,10 @@
     --header-bg: #ffffff;
     --header-text: #1a1a1a;
     --border-color: #e0e0e0;
-    --link-color: #007bff;
+    --link-color: #8a2be2; /* Vibrant accent color */
     --card-bg: rgba(255, 255, 255, 0.85);
     --subtle-text: #6c757d;
-    --button-bg: #007bff;
+    --button-bg: #8a2be2;
     --button-text: #ffffff;
     --form-bg: rgba(255, 255, 255, 0.5);
     --footer-bg: #1a1a1a;
@@ -25,10 +25,10 @@ body[data-theme="dark"] {
     --header-bg: #1e1e1e;
     --header-text: #e0e0e0;
     --border-color: #333333;
-    --link-color: #5d9ee0;
+    --link-color: #d896ff; /* Vibrant accent color for dark theme */
     --card-bg: rgba(25, 25, 25, 0.85);
     --subtle-text: #b0b0b0;
-    --button-bg: #5d9ee0;
+    --button-bg: #d896ff;
     --button-text: #121212;
     --form-bg: rgba(50, 50, 50, 0.5);
     --footer-bg: #0d0d0d;
@@ -47,6 +47,11 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.4s ease, color 0.4s ease;
+    background-image: radial-gradient(at top left, #f0f2f5, #e3e7ec);
+}
+
+body[data-theme="dark"] {
+    background-image: radial-gradient(at top left, #121212, #0d0d0d);
 }
 
 .container {
@@ -63,7 +68,7 @@ body {
 .main-header {
     background-color: var(--header-bg);
     color: var(--header-text);
-    padding: 0.85em 0; /* Updated: Reduced from 1.25em to 0.85em */
+    padding: 0.85em 0;
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
@@ -136,11 +141,11 @@ main.container {
 }
 
 .glass-morphism {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px); /* Increased blur */
+    -webkit-backdrop-filter: blur(15px);
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
@@ -163,11 +168,12 @@ h2 {
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 24px;
     padding-bottom: 24px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .post:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px); /* More pronounced lift */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .post:last-child {
@@ -228,7 +234,7 @@ h2 {
 
 .comment {
     border-left: 4px solid var(--link-color);
-    padding: 12px 20px;
+    padding: 16px 20px;
     margin-bottom: 16px;
     background-color: var(--form-bg);
     border-radius: 8px;
@@ -281,12 +287,12 @@ h2 {
 }
 
 .comment-form button:hover {
-    background-color: #0069d9;
+    background-color: #721bb6;
     transform: translateY(-2px);
 }
 
 body[data-theme="dark"] .comment-form button:hover {
-    background-color: #4b8cc4;
+    background-color: #c069ff;
 }
 
 /* About Me Section */
@@ -358,6 +364,11 @@ body[data-theme="dark"] .comment-form button:hover {
 
 .newsletter-signup button:hover {
     transform: translateY(-2px);
+    background-color: #721bb6;
+}
+
+body[data-theme="dark"] .newsletter-signup button:hover {
+    background-color: #c069ff;
 }
 
 .social-icons a {
