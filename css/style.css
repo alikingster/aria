@@ -63,9 +63,9 @@ body {
 .main-header {
     background-color: var(--header-bg);
     color: var(--header-text);
-    padding: 1.25em 0;
+    padding: 0.85em 0; /* Updated: Reduced from 1.25em to 0.85em */
     border-bottom: 1px solid var(--border-color);
-    position: sticky; /* Make header sticky */
+    position: sticky;
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
