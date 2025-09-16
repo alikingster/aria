@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-P1lY3/j+2F/92G3+y+6t2gK6f/8C+P+yP5u4X+A2F/9w+P/9A/8gG+0A/7wG/8A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body>
+<body data-theme="light">
 
     <header class="main-header">
         <div class="container">
@@ -18,11 +18,14 @@
                     <li><a href="#about">About Me</a></li>
                 </ul>
             </nav>
+            <button id="theme-toggle" aria-label="Toggle theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
         </div>
     </header>
 
     <main class="container">
-        <section id="posts" class="blog-posts">
+        <section id="posts" class="blog-posts glass-morphism">
             <h2>Latest Posts</h2>
             <article class="post">
                 <h3 class="post-title">First Blog Post</h3>
@@ -55,7 +58,7 @@
             </article>
         </section>
 
-        <section id="about" class="about-me">
+        <section id="about" class="about-me glass-morphism">
             <h2>About Me</h2>
             <img src="https://via.placeholder.com/150" alt="Author's profile picture" class="profile-pic">
             <p>Hello! I'm Aria, a passionate writer and hobbyist web developer. This blog is my space to explore various topics, from technology to art and everything in between. Thanks for stopping by!</p>
