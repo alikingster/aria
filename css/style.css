@@ -1,10 +1,41 @@
-/* General Body Styles */
+/*
+ * ======================================================================================
+ * CSS Variables for Theming
+ * ======================================================================================
+ */
+:root {
+    --bg-color: #f4f4f4;
+    --text-color: #333;
+    --header-bg: #333;
+    --header-text: #fff;
+    --border-color: #77aaff;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --subtle-text: #777;
+    --link-color: #77aaff;
+}
+
+body[data-theme="dark"] {
+    --bg-color: #222;
+    --text-color: #f4f4f4;
+    --header-bg: #111;
+    --header-text: #fff;
+    --border-color: #5d9ee0;
+    --card-bg: rgba(40, 40, 40, 0.85);
+    --subtle-text: #aaa;
+    --link-color: #5d9ee0;
+}
+
+/* * ======================================================================================
+ * General Body & Global Styles
+ * ======================================================================================
+ */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
@@ -13,12 +44,16 @@ body {
     padding: 0 20px;
 }
 
-/* Header Styles */
+/*
+ * ======================================================================================
+ * Header, Nav, and Theme Toggle
+ * ======================================================================================
+ */
 .main-header {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--header-bg);
+    color: var(--header-text);
     padding: 1em 0;
-    border-bottom: #77aaff 3px solid;
+    border-bottom: var(--border-color) 3px solid;
 }
 
 .main-header .container {
@@ -28,7 +63,7 @@ body {
 }
 
 .main-header h1 a {
-    color: #fff;
+    color: var(--header-text);
     text-decoration: none;
 }
 
@@ -40,33 +75,60 @@ body {
 }
 
 .main-header nav li a {
-    color: #fff;
+    color: var(--header-text);
     text-decoration: none;
     padding: 0 15px;
     transition: color 0.3s ease;
 }
 
 .main-header nav li a:hover {
-    color: #77aaff;
+    color: var(--link-color);
 }
 
-/* Main Content and Posts */
+#theme-toggle {
+    background: none;
+    border: none;
+    color: var(--header-text);
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#theme-toggle:hover {
+    color: var(--link-color);
+}
+
+/*
+ * ======================================================================================
+ * Main Content, Posts, and Glass Morphism
+ * ======================================================================================
+ */
 main.container {
     padding: 20px 0;
 }
 
+.glass-morphism {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
 .blog-posts, .about-me {
-    background: #fff;
     padding: 20px;
     margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .post {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     padding-bottom: 20px;
+}
+
+body[data-theme="dark"] .post {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .post:last-child {
@@ -74,20 +136,20 @@ main.container {
 }
 
 .post-title {
-    color: #333;
+    color: var(--text-color);
     margin-top: 0;
 }
 
 .post-meta {
     font-size: 0.9em;
-    color: #777;
+    color: var(--subtle-text);
     margin-bottom: 10px;
 }
 
 .read-more {
     display: inline-block;
     margin-top: 10px;
-    color: #77aaff;
+    color: var(--link-color);
     text-decoration: none;
     font-weight: bold;
 }
@@ -103,6 +165,8 @@ main.container {
     border-radius: 50%;
     float: left;
     margin-right: 20px;
+    border: 3px solid var(--text-color);
+    transition: border-color 0.3s;
 }
 
 .about-me::after {
@@ -111,10 +175,14 @@ main.container {
     clear: both;
 }
 
-/* Footer Styles */
+/*
+ * ======================================================================================
+ * Footer Styles
+ * ======================================================================================
+ */
 .main-footer {
-    background: #333;
-    color: #fff;
+    background: var(--header-bg);
+    color: var(--header-text);
     text-align: center;
     padding: 20px 0;
 }
@@ -126,17 +194,21 @@ main.container {
 }
 
 .social-icons a {
-    color: #fff;
+    color: var(--header-text);
     font-size: 1.5em;
     margin: 0 10px;
     transition: color 0.3s ease;
 }
 
 .social-icons a:hover {
-    color: #77aaff;
+    color: var(--link-color);
 }
 
-/* Responsive Design */
+/*
+ * ======================================================================================
+ * Responsive Design
+ * ======================================================================================
+ */
 @media (max-width: 600px) {
     .main-header .container, .main-footer .container {
         flex-direction: column;
