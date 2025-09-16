@@ -34,7 +34,14 @@
                     <span class="post-author">By Aria</span>
                 </div>
                 <p>This is the first entry on my blog. I'm excited to share my thoughts and ideas with you. This post is just a placeholder to show the layout and design. I'll be updating it soon with some real content!</p>
-                <a href="#" class="read-more">Read More &raquo;</a>
+                <div class="post-actions">
+                    <a href="#" class="read-more">Read More &raquo;</a>
+                    <div class="social-share">
+                        <a href="#" class="share-btn twitter" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="share-btn facebook" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="share-btn linkedin" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
             </article>
 
             <article class="post">
@@ -44,7 +51,14 @@
                     <span class="post-author">By Aria</span>
                 </div>
                 <p>Web development has been a fascinating journey for me. From learning the basics of HTML to mastering complex frameworks, every step has been rewarding. Here, I'll share my experiences and some tips for beginners.</p>
-                <a href="#" class="read-more">Read More &raquo;</a>
+                <div class="post-actions">
+                    <a href="#" class="read-more">Read More &raquo;</a>
+                    <div class="social-share">
+                        <a href="#" class="share-btn twitter" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="share-btn facebook" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="share-btn linkedin" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
             </article>
 
             <article class="post">
@@ -54,8 +68,35 @@
                     <span class="post-author">By Aria</span>
                 </div>
                 <p>Cooking is a creative process that allows you to express yourself. In this post, I'll dive into the basics of creating delicious meals and some of my favorite recipes. Whether you're a beginner or an expert, there's always something new to learn.</p>
-                <a href="#" class="read-more">Read More &raquo;</a>
+                <div class="post-actions">
+                    <a href="#" class="read-more">Read More &raquo;</a>
+                    <div class="social-share">
+                        <a href="#" class="share-btn twitter" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="share-btn facebook" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="share-btn linkedin" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
             </article>
+        </section>
+
+        <section id="comments" class="comments-section glass-morphism">
+            <h2>Comments</h2>
+            <div id="comments-list">
+                <div class="comment">
+                    <p class="comment-author"><strong>Reader 1</strong></p>
+                    <p class="comment-text">This is a great blog post! I really enjoyed reading it.</p>
+                </div>
+                <div class="comment">
+                    <p class="comment-author"><strong>Reader 2</strong></p>
+                    <p class="comment-text">Very insightful. I'd love to see more posts on this topic.</p>
+                </div>
+            </div>
+            <form id="comment-form" class="comment-form">
+                <h3>Leave a Comment</h3>
+                <input type="text" id="comment-name" placeholder="Your Name" required>
+                <textarea id="comment-text" placeholder="Your Comment" required></textarea>
+                <button type="submit">Submit Comment</button>
+            </form>
         </section>
 
         <section id="about" class="about-me glass-morphism">
@@ -68,6 +109,13 @@
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2024 My Simple Blog. All rights reserved.</p>
+            <div class="newsletter-signup">
+                <h3>Stay Updated!</h3>
+                <form id="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
@@ -75,6 +123,10 @@
             </div>
         </div>
     </footer>
+
+    <a href="#top" id="back-to-top" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
 
     <script src="js/main.js"></script>
 </body>
