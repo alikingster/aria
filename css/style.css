@@ -1,0 +1,152 @@
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Styles */
+.main-header {
+    background-color: #333;
+    color: #fff;
+    padding: 1em 0;
+    border-bottom: #77aaff 3px solid;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-header h1 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.main-header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.main-header nav li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0 15px;
+    transition: color 0.3s ease;
+}
+
+.main-header nav li a:hover {
+    color: #77aaff;
+}
+
+/* Main Content and Posts */
+main.container {
+    padding: 20px 0;
+}
+
+.blog-posts, .about-me {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.post {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+.post:last-child {
+    border-bottom: none;
+}
+
+.post-title {
+    color: #333;
+    margin-top: 0;
+}
+
+.post-meta {
+    font-size: 0.9em;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.read-more {
+    display: inline-block;
+    margin-top: 10px;
+    color: #77aaff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* About Me Section */
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 20px;
+}
+
+.about-me::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Footer Styles */
+.main-footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.main-footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.social-icons a {
+    color: #fff;
+    font-size: 1.5em;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #77aaff;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .main-header .container, .main-footer .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .main-header nav ul {
+        margin-top: 10px;
+    }
+    .profile-pic {
+        float: none;
+        margin: 0 auto 15px;
+    }
+}
