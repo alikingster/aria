@@ -3,131 +3,1248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple Blog</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-P1lY3/j+2F/92G3+y+6t2gK6f/8C+P+yP5u4X+A2F/9w+P/9A/8gG+0A/7wG/8A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>ARIA - Modern Blog</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --bg-card: #ffffff;
+            --text-primary: #000000;
+            --text-secondary: #444444;
+            --text-muted: #666666;
+            --border-color: #e0e0e0;
+            --accent-color: #000000;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(0, 0, 0, 0.2);
+        }
+        [data-theme="dark"] {
+            --bg-primary: #000000;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #999999;
+            --border-color: #333333;
+            --accent-color: #ffffff;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --shadow-hover: rgba(255, 255, 255, 0.2);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+        /* Loading Screen Styles */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid var(--border-color);
+            border-top: 5px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loading-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        /* --- General styles (unchanged) --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* Header */
+        header {
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            position: relative;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            letter-spacing: -1px;
+        }
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        .nav-links a:hover {
+            background: var(--bg-secondary);
+            transform: translateY(-2px);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after {
+            width: 80%;
+        }
+        /* Control Buttons */
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .control-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 900;
+        }
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-hover);
+            background: var(--accent-color);
+            color: var(--bg-primary);
+        }
+        .theme-toggle {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: var(--accent-color);
+            color: var(--bg-primary);
+        }
+        .search-container {
+            position: relative;
+        }
+        .search-input {
+            width: 250px;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            transform: scale(1.02);
+        }
+        .search-input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--bg-card);
+            padding: 2rem;
+            transition: left 0.3s ease;
+            z-index: 2000;
+            border-right: 2px solid var(--border-color);
+        }
+        .mobile-nav.active {
+            left: 0;
+        }
+        .mobile-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .mobile-nav-links {
+            list-style: none;
+        }
+        .mobile-nav-links li {
+            margin-bottom: 1rem;
+        }
+        .mobile-nav-links a {
+            display: block;
+            padding: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            background: var(--bg-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        .mobile-nav-links a:hover {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            transform: translateX(10px);
+        }
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* Hero Section */
+        .hero {
+            background: var(--bg-secondary);
+            margin: 2rem 0;
+            padding: 4rem 0;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            color: var(--text-primary);
+            position: relative;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease 0.2s both;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .cta-btn {
+            padding: 1rem 2rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 4px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .cta-primary {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+        }
+        .cta-primary:hover {
+            background: transparent;
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        .cta-secondary {
+            background: transparent;
+            color: var(--accent-color);
+        }
+        .cta-secondary:hover {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            transform: translateY(-3px);
+        }
+        /* Main Content */
+        main {
+            background: var(--bg-card);
+            margin: 2rem 0;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+        }
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            padding: 3rem;
+        }
+        /* Blog Posts */
+        .blog-posts {
+            display: grid;
+            gap: 2rem;
+        }
+        .post-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-hover);
+            border-color: var(--accent-color);
+        }
+        .post-image {
+            height: 200px;
+            background: var(--bg-secondary);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .post-image::after {
+            content: 'ARTICLE';
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+        }
+        .post-content {
+            padding: 2rem;
+        }
+        .post-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .category {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .post-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            line-height: 1.3;
+            font-weight: 800;
+        }
+        .post-card:hover .post-title {
+            color: var(--text-secondary);
+        }
+        .post-excerpt {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 2px solid var(--border-color);
+        }
+        .read-more {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .read-more:hover {
+            transform: translateX(5px);
+        }
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        .action-btn {
+            background: none;
+            border: 2px solid var(--border-color);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        .action-btn:hover {
+            color: var(--accent-color);
+            background: var(--bg-secondary);
+            border-color: var(--accent-color);
+        }
+        /* Sidebar */
+        .sidebar {
+            display: grid;
+            gap: 2rem;
+            align-content: start;
+        }
+        .widget {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--shadow);
+            border-color: var(--accent-color);
+        }
+        .widget h3 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .popular-posts {
+            list-style: none;
+        }
+        .popular-posts li {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .popular-posts li:hover {
+            background: var(--border-color);
+            transform: translateX(10px);
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .tag {
+            background: var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .tag:hover {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+        }
+        .sitemap-links {
+            list-style: none;
+        }
+        .sitemap-links li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sitemap-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .sitemap-links a:hover {
+            color: var(--accent-color);
+            transform: translateX(5px);
+            font-weight: 600;
+        }
+        /* Google Translate */
+        .google-translate-container {
+            margin-top: 1rem;
+            display: none;
+        }
+        /* Modernized Modal */
+        #translate-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            z-index: 3000;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+        .modern-translator-wrapper {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-primary);
+            text-align: center;
+        }
+        .modern-translator-wrapper h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .close-modal-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+        .close-modal-btn:hover {
+            color: var(--accent-color);
+        }
+        .goog-te-gadget {
+            font-family: inherit !important;
+            color: var(--text-primary) !important;
+        }
+        .goog-te-gadget .goog-te-combo {
+            background: var(--bg-secondary) !important;
+            border: 2px solid var(--border-color) !important;
+            padding: 1rem !important;
+            color: var(--text-primary) !important;
+            font-size: 1rem !important;
+            width: 100% !important;
+            font-weight: 600 !important;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .goog-te-gadget .goog-te-combo:focus {
+            outline: none;
+            border-color: var(--accent-color) !important;
+        }
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        body {
+            top: 0 !important;
+        }
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            margin-top: 2rem;
+            border: 2px solid var(--border-color);
+            border-bottom: none;
+            padding: 3rem 0 2rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .footer-links {
+            list-style: none;
+        }
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .footer-links a:hover {
+            color: var(--accent-color);
+            transform: translateX(5px);
+            font-weight: 600;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .social-links a {
+            display: inline-flex;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            text-decoration: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: var(--bg-secondary);
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+            font-weight: 600;
+        }
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            font-weight: 600;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        .toast.success {
+            border-color: var(--accent-color);
+            background: var(--accent-color);
+            color: var(--bg-primary);
+        }
+        .toast.error {
+            border-color: var(--text-muted);
+        }
+        /* New Sections */
+        .page-section {
+            padding: 4rem 0;
+            border: 2px solid var(--border-color);
+            background: var(--bg-secondary);
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .page-section h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-hover);
+            border-color: var(--accent-color);
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        .card p {
+            color: var(--text-secondary);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        #contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .contact-btn {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            padding: 1rem 2rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 4px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .contact-btn:hover {
+            background: transparent;
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+            }
+        }
+        @media (max-width: 768px) {
+            .page-section h2 {
+                font-size: 2rem;
+            }
+            .grid-layout {
+                padding: 0 1rem;
+            }
+        }
+    </style>
 </head>
-<body data-theme="light">
-
-    <header class="main-header">
-        <div class="container">
-            <h1><a href="#">My Blog</a></h1>
-            <nav>
-                <ul>
-                    <li><a href="#posts">Posts</a></li>
-                    <li><a href="#about">About Me</a></li>
-                </ul>
-            </nav>
-            <button id="theme-toggle" aria-label="Toggle theme">
-                <i class="fa-solid fa-moon"></i>
+<body>
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <div class="loading-text">LOADING...</div>
+    </div>
+    <header>
+        <nav class="container">
+            <div class="logo" onclick="scrollToTop()">ARIA</div>
+            <ul class="nav-links">
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#tech-section">TECH</a></li>
+                <li><a href="#lifestyle-section">LIFESTYLE</a></li>
+                <li><a href="#reviews-section">REVIEWS</a></li>
+                <li><a href="#about-section">ABOUT</a></li>
+                <li><a href="#contact-section">CONTACT</a></li>
+            </ul>
+            <div class="nav-controls">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="SEARCH ARTICLES...">
+                </div>
+                <button class="control-btn theme-toggle" onclick="toggleTheme()">
+                    <span id="theme-icon">☀️</span>
+                </button>
+                <button class="control-btn" onclick="openTranslateModal()" title="Translate">
+                    <span>🌐</span>
+                </button>
+                <button class="control-btn mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <span>☰</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-nav">
+        <div class="mobile-nav-header">
+            <div class="logo">ARIA</div>
+            <button class="control-btn" onclick="toggleMobileMenu()">
+                <span>✕</span>
             </button>
         </div>
-    </header>
-
-    <main class="container">
-        <section id="posts" class="blog-posts glass-morphism">
-            <h2>Latest Posts</h2>
-            <article class="post">
-                <h3 class="post-title">First Blog Post</h3>
-                <div class="post-meta">
-                    <span class="post-date">October 26, 2024</span> |
-                    <span class="post-author">By Aria</span>
-                </div>
-                <p>This is the first entry on my blog. I'm excited to share my thoughts and ideas with you. This post is just a placeholder to show the layout and design. I'll be updating it soon with some real content!</p>
-                <div class="post-actions">
-                    <a href="#" class="read-more">Read More &raquo;</a>
-                    <div class="social-share">
-                        <a href="#" class="share-btn twitter" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="share-btn facebook" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="share-btn linkedin" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="post">
-                <h3 class="post-title">A Journey into Web Development</h3>
-                <div class="post-meta">
-                    <span class="post-date">October 20, 2024</span> |
-                    <span class="post-author">By Aria</span>
-                </div>
-                <p>Web development has been a fascinating journey for me. From learning the basics of HTML to mastering complex frameworks, every step has been rewarding. Here, I'll share my experiences and some tips for beginners.</p>
-                <div class="post-actions">
-                    <a href="#" class="read-more">Read More &raquo;</a>
-                    <div class="social-share">
-                        <a href="#" class="share-btn twitter" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="share-btn facebook" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="share-btn linkedin" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="post">
-                <h3 class="post-title">The Art of Cooking</h3>
-                <div class="post-meta">
-                    <span class="post-date">October 15, 2024</span> |
-                    <span class="post-author">By Aria</span>
-                </div>
-                <p>Cooking is a creative process that allows you to express yourself. In this post, I'll dive into the basics of creating delicious meals and some of my favorite recipes. Whether you're a beginner or an expert, there's always something new to learn.</p>
-                <div class="post-actions">
-                    <a href="#" class="read-more">Read More &raquo;</a>
-                    <div class="social-share">
-                        <a href="#" class="share-btn twitter" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="share-btn facebook" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="share-btn linkedin" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </article>
-        </section>
-
-        <section id="comments" class="comments-section glass-morphism">
-            <h2>Comments</h2>
-            <div id="comments-list">
-                <div class="comment">
-                    <p class="comment-author"><strong>Reader 1</strong></p>
-                    <p class="comment-text">This is a great blog post! I really enjoyed reading it.</p>
-                </div>
-                <div class="comment">
-                    <p class="comment-author"><strong>Reader 2</strong></p>
-                    <p class="comment-text">Very insightful. I'd love to see more posts on this topic.</p>
+        <ul class="mobile-nav-links">
+            <li><a href="#home" onclick="toggleMobileMenu()">HOME</a></li>
+            <li><a href="#tech-section" onclick="toggleMobileMenu()">TECH</a></li>
+            <li><a href="#lifestyle-section" onclick="toggleMobileMenu()">LIFESTYLE</a></li>
+            <li><a href="#reviews-section" onclick="toggleMobileMenu()">REVIEWS</a></li>
+            <li><a href="#about-section" onclick="toggleMobileMenu()">ABOUT</a></li>
+            <li><a href="#contact-section" onclick="toggleMobileMenu()">CONTACT</a></li>
+        </ul>
+    </div>
+    <div id="translate-modal">
+        <div class="modern-translator-wrapper">
+            <h3>TRANSLATE PAGE</h3>
+            <button class="close-modal-btn" onclick="closeTranslateModal()">✕</button>
+            <div id="google_translate_element"></div>
+        </div>
+    </div>
+    <div class="container">
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h1>WELCOME TO ARIA</h1>
+                <p>Discover the latest in technology, lifestyle, and digital innovation with our cutting-edge insights</p>
+                <div class="hero-cta">
+                    <a href="#tech-section" class="cta-btn cta-primary">EXPLORE ARTICLES</a>
+                    <a href="#contact-section" class="cta-btn cta-secondary">GET UPDATES</a>
                 </div>
             </div>
-            <form id="comment-form" class="comment-form">
-                <h3>Leave a Comment</h3>
-                <input type="text" id="comment-name" placeholder="Your Name" required>
-                <textarea id="comment-text" placeholder="Your Comment" required></textarea>
-                <button type="submit">Submit Comment</button>
-            </form>
         </section>
-
-        <section id="about" class="about-me glass-morphism">
-            <h2>About Me</h2>
-            <img src="https://via.placeholder.com/150" alt="Author's profile picture" class="profile-pic">
-            <p>Hello! I'm Aria, a passionate writer and hobbyist web developer. This blog is my space to explore various topics, from technology to art and everything in between. Thanks for stopping by!</p>
-        </section>
-    </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <p>&copy; 2024 My Simple Blog. All rights reserved.</p>
-            <div class="newsletter-signup">
-                <h3>Stay Updated!</h3>
-                <form id="newsletter-form">
-                    <input type="email" placeholder="Enter your email" required>
-                    <button type="submit">Subscribe</button>
+        <main>
+            <div class="content-wrapper">
+                <section class="blog-posts" id="tech-section">
+                    <article class="post-card" onclick="openPost('ai-revolution')" data-category="AI & TECH">
+                        <div class="post-image"></div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="category">AI & TECH</span>
+                                <span>MARCH 15, 2024</span>
+                                <span>5 MIN READ</span>
+                            </div>
+                            <h2 class="post-title">The AI Revolution: How Machine Learning is Transforming Industries</h2>
+                            <p class="post-excerpt">Explore how artificial intelligence is reshaping everything from healthcare to finance, and what it means for the future of work. Discover the latest breakthroughs and their real-world applications.</p>
+                            <div class="post-footer">
+                                <a href="#" class="read-more">READ MORE →</a>
+                                <div class="post-actions">
+                                    <button class="action-btn" onclick="event.stopPropagation(); likePost(this)" title="Like">LIKE</button>
+                                    <button class="action-btn" onclick="event.stopPropagation(); bookmarkPost(this)" title="Bookmark">SAVE</button>
+                                    <button class="action-btn" onclick="event.stopPropagation(); sharePost(this)" title="Share">SHARE</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="post-card" onclick="openPost('sustainable-tech')" data-category="GREEN TECH">
+                        <div class="post-image"></div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="category">GREEN TECH</span>
+                                <span>MARCH 12, 2024</span>
+                                <span>7 MIN READ</span>
+                            </div>
+                            <h2 class="post-title">Sustainable Technology: Building a Greener Digital Future</h2>
+                            <p class="post-excerpt">Learn about the latest innovations in sustainable technology, from renewable energy solutions to eco-friendly gadgets that are helping reduce our carbon footprint.</p>
+                            <div class="post-footer">
+                                <a href="#" class="read-more">READ MORE →</a>
+                                <div class="post-actions">
+                                    <button class="action-btn" onclick="event.stopPropagation(); likePost(this)" title="Like">LIKE</button>
+                                    <button class="action-btn" onclick="event.stopPropagation(); bookmarkPost(this)" title="Bookmark">SAVE</button>
+                                    <button class="action-btn" onclick="event.stopPropagation(); sharePost(this)" title="Share">SHARE</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="post-card" onclick="openPost('remote-productivity')" data-category="PRODUCTIVITY">
+                        <div class="post-image"></div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="category">PRODUCTIVITY</span>
+                                <span>MARCH 10, 2024</span>
+                                <span>4 MIN READ</span>
+                            </div>
+                            <h2 class="post-title">Remote Work Revolution: Tools and Tips for Maximum Productivity</h2>
+                            <p class="post-excerpt">Master the art of remote work with our comprehensive guide to the best tools, techniques, and strategies for staying productive while working from anywhere.</p>
+                            <div class="post-footer">
+                                <a href="#" class="read-more">READ MORE →</a>
+                                <div class="post-actions">
+                                    <button class="action-btn" onclick="event.stopPropagation(); likePost(this)" title="Like">LIKE</button>
+                                    <button class="action-btn" onclick="event.stopPropagation(); bookmarkPost(this)" title="Bookmark">SAVE</button>
+                                    <button class="action-btn" onclick="event.stopPropagation(); sharePost(this)" title="Share">SHARE</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+                <aside class="sidebar">
+                    <div class="widget">
+                        <h3>POPULAR POSTS</h3>
+                        <ul class="popular-posts">
+                            <li onclick="openPost('post-1')">The AI Revolution: Transforming Industries</li>
+                            <li onclick="openPost('post-2')">A Guide to Sustainable Technology</li>
+                            <li onclick="openPost('post-3')">Remote Work Productivity Hacks</li>
+                            <li onclick="openPost('post-4')">Cybersecurity in 2024</li>
+                        </ul>
+                    </div>
+                    <div class="widget">
+                        <h3>CATEGORIES</h3>
+                        <div class="tags">
+                            <span class="tag" onclick="filterPosts('ai')">AI & TECH</span>
+                            <span class="tag" onclick="filterPosts('green-tech')">GREEN TECH</span>
+                            <span class="tag" onclick="filterPosts('productivity')">PRODUCTIVITY</span>
+                            <span class="tag" onclick="filterPosts('security')">SECURITY</span>
+                            <span class="tag" onclick="filterPosts('lifestyle')">LIFESTYLE</span>
+                            <span class="tag" onclick="filterPosts('reviews')">REVIEWS</span>
+                        </div>
+                    </div>
+                    <div class="widget">
+                        <h3>SITEMAP</h3>
+                        <ul class="sitemap-links">
+                            <li><a href="#home">HOME</a></li>
+                            <li><a href="#tech-section">TECH</a></li>
+                            <li><a href="#lifestyle-section">LIFESTYLE</a></li>
+                            <li><a href="#reviews-section">REVIEWS</a></li>
+                            <li><a href="#about-section">ABOUT US</a></li>
+                            <li><a href="#contact-section">CONTACT</a></li>
+                            <li><a href="#privacy-policy">PRIVACY POLICY</a></li>
+                            <li><a href="#terms-of-service">TERMS OF SERVICE</a></li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+            
+            <section class="container page-section" id="lifestyle-section">
+                <h2>LIFESTYLE</h2>
+                <div class="grid-layout">
+                    <div class="card">
+                        <h3>Mindful Technology Use</h3>
+                        <p>Learn how to integrate technology into your life in a balanced and healthy way to improve your well-being and productivity. Discover tips for digital detox and mindful screen time.</p>
+                    </div>
+                    <div class="card">
+                        <h3>The Future of Urban Living</h3>
+                        <p>Explore the latest smart city technologies and how they're changing the way we live, work, and interact with our urban environments. From smart transportation to sustainable buildings.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Healthy Habits for Digital Nomads</h3>
+                        <p>A guide to maintaining a healthy lifestyle while working remotely. We cover everything from setting up an ergonomic workspace to finding the best tools for managing stress on the go.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="container page-section" id="reviews-section">
+                <h2>REVIEWS</h2>
+                <div class="grid-layout">
+                    <div class="card">
+                        <h3>Review: Latest Smartphone</h3>
+                        <p>A comprehensive review of the new model, covering its design, performance, camera capabilities, and battery life. Find out if it's the right upgrade for you.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Gadget Showdown: Tablets</h3>
+                        <p>We compare the top three tablets on the market, evaluating them on speed, display quality, software features, and overall value. See who comes out on top.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Wearable Tech: Fitness Trackers</h3>
+                        <p>Our in-depth review of the latest fitness trackers, focusing on accuracy, ease of use, and advanced health monitoring features. Get fit with the right tech.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="container page-section" id="about-section">
+                <h2>ABOUT US</h2>
+                <p>ARIA was founded with a simple mission: to make technology accessible and exciting for everyone. We believe that understanding the digital world is key to navigating the future. Our team of expert writers and analysts is dedicated to providing clear, insightful, and engaging content that informs and inspires. Join us on our journey to explore the intersection of technology and everyday life.</p>
+            </section>
+            
+            <section class="container page-section" id="contact-section">
+                <h2>CONTACT US</h2>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-btn cta-primary">SEND MESSAGE</button>
                 </form>
+            </section>
+        </main>
+    </div>
+    <div id="toast" class="toast"></div>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>ABOUT ARIA</h4>
+                    <p>ARIA is a modern blog dedicated to exploring the intersection of technology, lifestyle, and innovation. We provide insightful articles, expert reviews, and a community for forward-thinkers.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#tech-section">Tech</a></li>
+                        <li><a href="#lifestyle-section">Lifestyle</a></li>
+                        <li><a href="#reviews-section">Reviews</a></li>
+                        <li><a href="#about-section">About</a></li>
+                        <li><a href="#contact-section">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul class="footer-links">
+                        <li><a href="#tech-section">Technology</a></li>
+                        <li><a href="#lifestyle-section">Lifestyle</a></li>
+                        <li><a href="#reviews-section">Reviews</a></li>
+                        <li><a href="#">Gaming</a></li>
+                        <li><a href="#">Design</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://twitter.com" target="_blank" title="Twitter">𝕏</a>
+                        <a href="https://instagram.com" target="_blank" title="Instagram">📸</a>
+                        <a href="https://linkedin.com" target="_blank" title="LinkedIn">in</a>
+                        <a href="https://facebook.com" target="_blank" title="Facebook">f</a>
+                    </div>
+                    <div id="newsletter-form">
+                        <div class="form-group">
+                            <label for="newsletter-email">SUBSCRIBE</label>
+                            <input type="email" id="newsletter-email" placeholder="YOUR EMAIL ADDRESS">
+                        </div>
+                        <button class="contact-btn">SUBSCRIBE</button>
+                    </div>
+                </div>
             </div>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
+            <div class="footer-bottom">
+                &copy; 2024 ARIA. ALL RIGHTS RESERVED.
             </div>
         </div>
     </footer>
+    <script>
+        // --- Core Functions ---
+        const body = document.body;
+        const themeToggleBtn = document.querySelector('.theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const mobileOverlay = document.querySelector('.mobile-overlay');
+        const toast = document.getElementById('toast');
+        const translateModal = document.getElementById('translate-modal');
+        const loadingScreen = document.getElementById('loading-screen');
 
-    <a href="#top" id="back-to-top" title="Back to top">
-        <i class="fas fa-arrow-up"></i>
-    </a>
+        // Theme Toggle
+        const toggleTheme = () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        };
 
-    <script src="js/main.js"></script>
+        const loadTheme = () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', savedTheme);
+            themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        };
+
+        // Mobile Menu Toggle
+        const toggleMobileMenu = () => {
+            mobileNav.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        };
+
+        // Google Translate - Lazy Loading
+        let isTranslateLoaded = false;
+        
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        const openTranslateModal = () => {
+            if (!isTranslateLoaded) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+                document.body.appendChild(script);
+                isTranslateLoaded = true;
+            }
+            translateModal.style.display = 'block';
+        };
+
+        const closeTranslateModal = () => {
+            translateModal.style.display = 'none';
+        };
+
+        // Scroll to Top
+        const scrollToTop = () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // Post Interactions
+        const showToast = (message, type = 'success') => {
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        };
+
+        const likePost = (button) => {
+            showToast('Post Liked!', 'success');
+        };
+
+        const bookmarkPost = (button) => {
+            showToast('Post Saved!', 'success');
+        };
+
+        const sharePost = (button) => {
+            showToast('Post Shared!', 'success');
+        };
+
+        const openPost = (postId) => {
+            showToast(`Opening post: ${postId}`, 'success');
+        };
+
+        // Post Filtering (Sidebar)
+        const filterPosts = (category) => {
+            const posts = document.querySelectorAll('.post-card');
+            posts.forEach(post => {
+                if (category === 'all' || post.getAttribute('data-category').toLowerCase().includes(category.toLowerCase())) {
+                    post.style.display = 'block';
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+            showToast(`Filtering by category: ${category}`, 'success');
+        };
+        
+        // --- Event Listeners and Loading Screen ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            // Simulate content loading and then hide the loading screen
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 2000); // Hide after 2 seconds
+        });
+
+        // Sticky Header Effect (optional but good practice)
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 2px 10px var(--shadow)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
